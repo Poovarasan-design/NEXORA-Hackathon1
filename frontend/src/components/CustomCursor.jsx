@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 export default function CustomCursor() {
-  const [position, setPosition] = useState({ x: -100, y: -100 });
-  const [trailingPos, setTrailingPos] = useState({ x: -100, y: -100 });
+  const outerRef = useRef(null);
+  const innerRef = useRef(null);
+  const posRef   = useRef({ x: -200, y: -200 });
+  const trailRef = useRef({ x: -200, y: -200 });
   const [isHovered, setIsHovered] = useState(false);
-  const [isMobile, setIsMobile] = useState(true);
+  const [isMobile, setIsMobile]   = useState(true);
+  const frameRef  = useRef(null);
 
   useEffect(() => {
-    const checkMobile = () => {
+    const checkDevice = () => {
       const isTouch = window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 1024;
       setIsMobile(isTouch);
       if (!isTouch) {
@@ -17,72 +20,100 @@ export default function CustomCursor() {
       }
     };
 
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
+    checkDevice();
+    window.addEventListener('resize', checkDevice);
 
     const onMouseMove = (e) => {
-      setPosition({ x: e.clientX, y: e.clientY });
+      posRef.current = { x: e.clientX, y: e.clientY };
     };
 
     const onMouseOver = (e) => {
       const target = e.target;
-      const isInteractive =
+      const interactive =
         target.tagName === 'A' ||
         target.tagName === 'BUTTON' ||
         target.closest('button') ||
         target.closest('a') ||
         target.classList?.contains('interactive-element');
-
-      setIsHovered(Boolean(isInteractive));
+      setIsHovered(Boolean(interactive));
     };
 
     window.addEventListener('mousemove', onMouseMove, { passive: true });
     window.addEventListener('mouseover', onMouseOver);
 
     return () => {
-      window.removeEventListener('resize', checkMobile);
+      window.removeEventListener('resize', checkDevice);
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseover', onMouseOver);
       document.body.classList.remove('has-custom-cursor');
     };
   }, []);
 
+  // Smooth trailing cursor via RAF (no React re-renders for performance)
   useEffect(() => {
-    if (isMobile) return undefined;
+    if (isMobile) return;
 
-    let frameId;
     const tick = () => {
-      setTrailingPos((prev) => ({
-        x: prev.x + (position.x - prev.x) * 0.18,
-        y: prev.y + (position.y - prev.y) * 0.18,
-      }));
-      frameId = requestAnimationFrame(tick);
+      trailRef.current.x += (posRef.current.x - trailRef.current.x) * 0.14;
+      trailRef.current.y += (posRef.current.y - trailRef.current.y) * 0.14;
+
+      if (outerRef.current) {
+        const size   = isHovered ? 44 : 32;
+        const offset = size / 2;
+        outerRef.current.style.transform = `translate3d(${trailRef.current.x - offset}px, ${trailRef.current.y - offset}px, 0)`;
+        outerRef.current.style.width  = `${size}px`;
+        outerRef.current.style.height = `${size}px`;
+        outerRef.current.style.borderColor = isHovered ? '#A855F7' : '#00D9FF';
+        outerRef.current.style.boxShadow   = isHovered
+          ? '0 0 20px rgba(168,85,247,0.5)'
+          : '0 0 14px rgba(0,217,255,0.4)';
+        outerRef.current.style.background  = isHovered ? 'rgba(168,85,247,0.08)' : 'transparent';
+      }
+
+      if (innerRef.current) {
+        innerRef.current.style.transform = `translate3d(${posRef.current.x - 4}px, ${posRef.current.y - 4}px, 0)`;
+        innerRef.current.style.background = isHovered ? '#A855F7' : '#00D9FF';
+        innerRef.current.style.boxShadow  = isHovered
+          ? '0 0 12px #A855F7'
+          : '0 0 10px #00D9FF';
+      }
+
+      frameRef.current = requestAnimationFrame(tick);
     };
 
-    frameId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frameId);
-  }, [position, isMobile]);
+    frameRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frameRef.current);
+  }, [isMobile, isHovered]);
 
   if (isMobile) return null;
 
   return (
     <>
+      {/* Trailing ring */}
       <div
-        className={`fixed top-0 left-0 pointer-events-none z-[9999] rounded-full border border-neonCyan shadow-[0_0_18px_rgba(6,182,212,0.5)] transition-all duration-150 ease-out ${
-          isHovered
-            ? 'w-12 h-12 -translate-x-6 -translate-y-6 bg-neonCyan/10 border-neonPurple shadow-[0_0_24px_rgba(168,85,247,0.5)]'
-            : 'w-8 h-8 -translate-x-4 -translate-y-4 bg-transparent'
-        }`}
+        ref={outerRef}
+        className="fixed top-0 left-0 pointer-events-none z-[9999] rounded-full border"
         style={{
-          transform: `translate3d(${trailingPos.x}px, ${trailingPos.y}px, 0) ${isHovered ? 'scale(1.25)' : 'scale(1)'}`,
+          width: '32px',
+          height: '32px',
+          borderColor: '#00D9FF',
+          boxShadow: '0 0 14px rgba(0,217,255,0.4)',
+          background: 'transparent',
+          transition: 'border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, width 0.2s ease, height 0.2s ease',
+          willChange: 'transform',
         }}
       />
+      {/* Sharp dot */}
       <div
-        className={`fixed top-0 left-0 pointer-events-none z-[10000] rounded-full bg-neonPurple shadow-[0_0_14px_rgba(168,85,247,0.8)] transition-all duration-150 ease-out ${
-          isHovered ? 'w-3 h-3 -translate-x-1.5 -translate-y-1.5 bg-neonCyan shadow-[0_0_16px_rgba(6,182,212,0.8)]' : 'w-2 h-2 -translate-x-1 -translate-y-1'
-        }`}
+        ref={innerRef}
+        className="fixed top-0 left-0 pointer-events-none z-[10000] rounded-full"
         style={{
-          transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
+          width: '8px',
+          height: '8px',
+          background: '#00D9FF',
+          boxShadow: '0 0 10px #00D9FF',
+          transition: 'background 0.3s ease, box-shadow 0.3s ease',
+          willChange: 'transform',
         }}
       />
     </>

@@ -2,92 +2,56 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================
+   NEXORA — PREMIUM CINEMATIC CSS SYSTEM
+   ============================================================ */
+
 @layer base {
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 110px;
-    background-color: #040408;
+    background-color: #050816;
   }
 
   body {
-    background-color: #040408;
+    /* Background is handled by the live WebGL shader canvas */
+    background-color: transparent;
     color: #e2e8f0;
-    background-image:
-      radial-gradient(circle at 20% 20%, rgba(168, 85, 247, 0.18), transparent 18%),
-      radial-gradient(circle at 80% 30%, rgba(6, 182, 212, 0.12), transparent 20%),
-      radial-gradient(circle at 50% 80%, rgba(59, 130, 246, 0.08), transparent 22%);
-    background-attachment: fixed;
     overscroll-behavior-y: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
+    font-family: 'Space Grotesk', sans-serif;
   }
 
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.85;
-    background-image:
-      radial-gradient(2px 2px at 10% 20%, rgba(255,255,255,0.8), transparent),
-      radial-gradient(1.5px 1.5px at 25% 40%, rgba(255,255,255,0.75), transparent),
-      radial-gradient(1.8px 1.8px at 40% 70%, rgba(168,85,247,0.7), transparent),
-      radial-gradient(1.2px 1.2px at 60% 25%, rgba(255,255,255,0.7), transparent),
-      radial-gradient(1.6px 1.6px at 75% 55%, rgba(6,182,212,0.75), transparent),
-      radial-gradient(1.4px 1.4px at 90% 35%, rgba(255,255,255,0.7), transparent),
-      radial-gradient(1.5px 1.5px at 55% 85%, rgba(255,255,255,0.7), transparent);
-    background-repeat: repeat;
-    background-size: 320px 320px;
-    animation: ambientGridFloat 18s ease-in-out infinite alternate;
-  }
-
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(168, 85, 247, 0.08),
-      transparent 28%,
-      rgba(6, 182, 212, 0.08) 65%,
-      transparent 100%
-    );
-    mix-blend-mode: screen;
-    opacity: 0.9;
-  }
+  /* body pseudo-elements removed — WebGL shader handles the environment */
 
   #root {
     position: relative;
     z-index: 1;
     isolation: isolate;
+    /* Shader canvas is fixed at z-index:0, everything here is above it */
   }
 }
 
-@keyframes ambientGridFloat {
-  0% {
-    transform: translate3d(0, 0, 0) scale(1);
-    opacity: 0.7;
-  }
-  100% {
-    transform: translate3d(0, -12px, 0) scale(1.04);
-    opacity: 0.9;
-  }
-}
+/* ============================================================
+   KEYFRAMES
+   ============================================================ */
+/* starFloat removed — WebGL shader is now the live background */
 
+/* ============================================================
+   SCROLL REVEAL SYSTEM
+   ============================================================ */
 .reveal-base {
   opacity: 0;
-  transform: translate3d(0, 28px, 0) scale(0.985);
-  filter: blur(4px);
+  transform: translate3d(0, 36px, 0) scale(0.97);
+  filter: blur(6px);
   transition:
-    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
-    transform 700ms cubic-bezier(0.22, 1, 0.36, 1),
-    filter 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 800ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 800ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 800ms cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform, opacity, filter;
 }
 
@@ -97,23 +61,162 @@
   filter: blur(0);
 }
 
-section,
-footer {
+.reveal-left {
+  opacity: 0;
+  transform: translate3d(-60px, 0, 0) scale(0.96);
+  filter: blur(4px);
+  transition:
+    opacity 800ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 800ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 800ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-left.is-visible { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0); }
+
+.reveal-right {
+  opacity: 0;
+  transform: translate3d(60px, 0, 0) scale(0.96);
+  filter: blur(4px);
+  transition:
+    opacity 800ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 800ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 800ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-right.is-visible { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0); }
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.85);
+  filter: blur(8px);
+  transition:
+    opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 900ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-scale.is-visible { opacity: 1; transform: scale(1); filter: blur(0); }
+
+/* ============================================================
+   SECTION ISOLATION
+   ============================================================ */
+section, footer {
   position: relative;
   isolation: isolate;
 }
 
-section::before,
-footer::before {
+/* ============================================================
+   SCI-FI GRID BACKGROUNDS
+   ============================================================ */
+.bg-cyber-grid {
+  background-image:
+    linear-gradient(to right,  rgba(124, 58, 237, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 217, 255, 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.bg-cyber-grid-dense {
+  background-image:
+    linear-gradient(to right,  rgba(124, 58, 237, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 217, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to right,  rgba(124, 58, 237, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 217, 255, 0.02) 1px, transparent 1px);
+  background-size: 48px 48px, 48px 48px, 12px 12px, 12px 12px;
+}
+
+/* ============================================================
+   GLASSMORPHISM
+   ============================================================ */
+.glass-panel {
+  background: rgba(11, 16, 38, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(124, 58, 237, 0.2);
+}
+
+.glass-panel-cyan {
+  background: rgba(8, 20, 40, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 217, 255, 0.25);
+}
+
+.glass-panel-gold {
+  background: rgba(15, 10, 2, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+/* ============================================================
+   NEXORA GLOW TYPOGRAPHY
+   ============================================================ */
+.nexora-glow {
+  text-shadow:
+    0 0 30px rgba(168, 85, 247, 0.9),
+    0 0 60px rgba(168, 85, 247, 0.5),
+    0 0 120px rgba(168, 85, 247, 0.2);
+}
+
+.nexora-glow-cyan {
+  text-shadow:
+    0 0 30px rgba(0, 217, 255, 0.9),
+    0 0 60px rgba(0, 217, 255, 0.5),
+    0 0 120px rgba(0, 217, 255, 0.2);
+}
+
+.nexora-glow-gold {
+  text-shadow:
+    0 0 20px rgba(245, 158, 11, 0.9),
+    0 0 50px rgba(245, 158, 11, 0.6),
+    0 0 100px rgba(245, 158, 11, 0.3);
+}
+
+/* ============================================================
+   PREMIUM BORDERS
+   ============================================================ */
+.border-gradient {
+  position: relative;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+
+.border-gradient::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(168, 85, 247, 0.03), rgba(6, 182, 212, 0.02), transparent 75%);
-  pointer-events: none;
-  z-index: 0;
+  z-index: -1;
+  margin: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.6), rgba(0, 217, 255, 0.4), rgba(217, 70, 239, 0.3));
 }
 
-/* Premium 3D Theme Card polish */
+/* ============================================================
+   LIGHT SWEEP (shimmer) ON ELEMENTS
+   ============================================================ */
+.shimmer-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.7s ease;
+}
+
+.shimmer-card:hover::after {
+  transform: translateX(100%);
+}
+
+/* ============================================================
+   3D FLIP CARDS (Theme Cards)
+   ============================================================ */
 .theme-card-shell {
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
@@ -121,11 +224,11 @@ footer::before {
 }
 
 .theme-card-shell .theme-face {
-  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.3), 0 0 18px rgba(168, 85, 247, 0.12);
+  box-shadow: 0 14px 28px rgba(5, 8, 22, 0.5), 0 0 20px rgba(168, 85, 247, 0.12);
 }
 
 .theme-card-shell:hover .theme-face {
-  box-shadow: 0 18px 32px rgba(15, 23, 42, 0.36), 0 0 24px rgba(168, 85, 247, 0.16);
+  box-shadow: 0 18px 40px rgba(5, 8, 22, 0.6), 0 0 30px rgba(168, 85, 247, 0.20);
 }
 
 .theme-card-shell .theme-front::before,
@@ -133,61 +236,316 @@ footer::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.08), transparent 34%, rgba(6,182,212,0.06));
+  background: linear-gradient(135deg, rgba(255,255,255,0.06), transparent 40%, rgba(0,217,255,0.05));
   pointer-events: none;
 }
 
 .theme-card-shell .theme-front,
 .theme-card-shell .theme-back {
-  transition: box-shadow 300ms ease, border-color 300ms ease, transform 300ms ease;
-}
-
-.theme-card-shell:hover .theme-front,
-.theme-card-shell:hover .theme-back {
-  transform: translateY(-2px);
+  transition: box-shadow 300ms ease, border-color 300ms ease;
 }
 
 .theme-card-shell .theme-back {
-  box-shadow: 0 18px 34px rgba(6, 182, 212, 0.12), 0 0 22px rgba(6, 182, 212, 0.08);
+  box-shadow: 0 18px 40px rgba(0, 217, 255, 0.14), 0 0 25px rgba(0, 217, 255, 0.10);
 }
 
-/* Nicer buttons / micro-interactions */
-button,
-a {
-  -webkit-tap-highlight-color: transparent;
+/* ============================================================
+   3D FLIP UTILITIES
+   ============================================================ */
+.perspective-1000  { perspective: 1000px; }
+.transform-style-3d { transform-style: preserve-3d; -webkit-transform-style: preserve-3d; }
+.backface-hidden    { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.rotate-y-180       { transform: rotateY(180deg); -webkit-transform: rotateY(180deg); }
+
+/* ============================================================
+   INTRO ANIMATION — CLIP-PATH ZOOM-THROUGH
+   ============================================================ */
+.intro-exit {
+  animation: introExit 0.8s cubic-bezier(0.76, 0, 0.24, 1) forwards;
 }
 
-button:active,
-a:active {
-  transform: translateY(1px) scale(0.995);
+@keyframes introExit {
+  0%   { clip-path: inset(0% 0% 0% 0%); opacity: 1; transform: scale(1); }
+  50%  { clip-path: inset(0% 0% 0% 0%); opacity: 1; transform: scale(1.08); }
+  100% { clip-path: inset(50% 50% 50% 50%); opacity: 0; transform: scale(1.4); }
 }
 
-/* Reduced-motion support */
-@media (max-width: 767px) {
-  html {
-    scroll-padding-top: 92px;
+.nexora-letter-reveal {
+  display: inline-block;
+  animation: letterDrop 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  opacity: 0;
+}
+
+@keyframes letterDrop {
+  0%   { opacity: 0; transform: translateY(-30px) scale(1.2); filter: blur(8px); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+/* ============================================================
+   SCANLINE EFFECT
+   ============================================================ */
+.scanline-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+  opacity: 0.4;
+  z-index: 0;
+}
+
+/* ============================================================
+   GRADIENT TEXT
+   ============================================================ */
+.gradient-text-purple-cyan {
+  background: linear-gradient(135deg, #A855F7, #00D9FF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.gradient-text-cyan-purple {
+  background: linear-gradient(135deg, #00D9FF, #A855F7, #D946EF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.gradient-text-gold {
+  background: linear-gradient(135deg, #F59E0B, #FCD34D, #F59E0B);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.gradient-text-white {
+  background: linear-gradient(180deg, #FFFFFF, #94a3b8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ============================================================
+   ANIMATED GRADIENT BORDERS
+   ============================================================ */
+.animated-border {
+  position: relative;
+  border-radius: inherit;
+}
+
+.animated-border::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(var(--border-angle, 0deg), #7C3AED, #00D9FF, #D946EF, #7C3AED);
+  background-size: 300%;
+  animation: borderFlow 4s linear infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+@keyframes borderFlow {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ============================================================
+   THINK / CODE / INNOVATE SECTION WORD DISPLAY
+   ============================================================ */
+.manifesto-word {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(4rem, 18vw, 18rem);
+  line-height: 0.88;
+  letter-spacing: -0.01em;
+  will-change: transform, opacity;
+}
+
+/* ============================================================
+   PRIZE ₹ NUMBER
+   ============================================================ */
+.prize-number {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(5rem, 20vw, 22rem);
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+}
+
+/* ============================================================
+   HARDWARE/SOFTWARE SECTION
+   ============================================================ */
+.hw-sw-label {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(3rem, 12vw, 12rem);
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn-nexora {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2.5rem;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: white;
+  background: linear-gradient(135deg, #7C3AED, #4f46e5, #00D9FF);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 0 30px rgba(124, 58, 237, 0.5), 0 0 60px rgba(0, 217, 255, 0.2);
+  overflow: hidden;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-nexora::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #00D9FF, #7C3AED, #D946EF);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.btn-nexora:hover {
+  box-shadow: 0 0 50px rgba(0, 217, 255, 0.7), 0 0 100px rgba(124, 58, 237, 0.3);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.btn-nexora:hover::before {
+  opacity: 1;
+}
+
+.btn-nexora span { position: relative; z-index: 1; }
+
+.btn-nexora-outline {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 2rem;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #00D9FF;
+  background: transparent;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(0, 217, 255, 0.4);
+  box-shadow: 0 0 15px rgba(0, 217, 255, 0.15) inset;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-nexora-outline:hover {
+  color: white;
+  border-color: #00D9FF;
+  background: rgba(0, 217, 255, 0.1);
+  box-shadow: 0 0 25px rgba(0, 217, 255, 0.3), 0 0 50px rgba(0, 217, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+/* ============================================================
+   TIMELINE — GLOWING PROGRESS LINE
+   ============================================================ */
+.timeline-line {
+  background: linear-gradient(180deg, #7C3AED, #00D9FF, #D946EF);
+  box-shadow: 0 0 15px rgba(0, 217, 255, 0.5), 0 0 30px rgba(124, 58, 237, 0.3);
+}
+
+/* ============================================================
+   PREMIUM SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #030610;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #7C3AED, #00D9FF);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #A855F7, #06B6D4);
+}
+
+/* ============================================================
+   SECTION DIVIDERS
+   ============================================================ */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(124, 58, 237, 0.4), rgba(0, 217, 255, 0.4), transparent);
+}
+
+/* ============================================================
+   FAQ ACCORDION
+   ============================================================ */
+.faq-item {
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.faq-item.open {
+  border-color: rgba(0, 217, 255, 0.4);
+  box-shadow: 0 0 30px rgba(0, 217, 255, 0.08), 0 0 0 1px rgba(0, 217, 255, 0.15) inset;
+}
+
+/* ============================================================
+   CUSTOM CURSOR
+   ============================================================ */
+@media (min-width: 1024px) {
+  body.has-custom-cursor,
+  body.has-custom-cursor a,
+  body.has-custom-cursor button,
+  body.has-custom-cursor input,
+  body.has-custom-cursor select {
+    cursor: none !important;
   }
+}
+
+/* ============================================================
+   MOBILE OVERRIDES
+   ============================================================ */
+@media (max-width: 767px) {
+  html { scroll-padding-top: 80px; }
 
   body::before {
-    background-size: 420px 420px;
-    opacity: 0.45;
-    animation-duration: 22s;
+    background-size: 500px 500px;
+    opacity: 0.35;
+    animation-duration: 30s;
   }
 
-  body::after {
-    opacity: 0.5;
-  }
+  body::after { opacity: 0.4; }
 
-  section,
-  footer {
-    overflow: hidden;
-  }
+  section, footer { overflow: hidden; }
+
+  .manifesto-word { font-size: clamp(3rem, 22vw, 6rem); }
+  .prize-number   { font-size: clamp(4rem, 28vw, 8rem); }
+  .hw-sw-label    { font-size: clamp(2.5rem, 18vw, 5rem); }
 }
 
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
+  html { scroll-behavior: auto; }
 
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -196,78 +554,9 @@ a:active {
     scroll-behavior: auto !important;
   }
 
-  .reveal-base {
+  .reveal-base, .reveal-left, .reveal-right, .reveal-scale {
     opacity: 1;
     transform: none;
     filter: none;
-  }
-}
-
-/* Sci-Fi Grid Background Pattern */
-.bg-cyber-grid {
-  background-image: 
-    linear-gradient(to right, rgba(168, 85, 247, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
-  background-size: 40px 40px;
-}
-
-/* Glassmorphism Card Style */
-.glass-panel {
-  background: rgba(10, 13, 26, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(168, 85, 247, 0.2);
-}
-
-.glass-panel-cyan {
-  background: rgba(8, 20, 36, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(6, 182, 212, 0.25);
-}
-
-/* 3D Flip Card Utilities */
-.perspective-1000 {
-  perspective: 1000px;
-}
-
-.transform-style-3d {
-  transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
-}
-
-.backface-hidden {
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-
-.rotate-y-180 {
-  transform: rotateY(180deg);
-  -webkit-transform: rotateY(180deg);
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #040408;
-}
-::-webkit-scrollbar-thumb {
-  background: #2a1b4e;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #a855f7;
-}
-
-/* Hide default cursor on desktop when custom cursor is active */
-@media (min-width: 1024px) {
-  body.has-custom-cursor,
-  body.has-custom-cursor a,
-  body.has-custom-cursor button,
-  body.has-custom-cursor input,
-  body.has-custom-cursor select {
-    cursor: none !important;
   }
 }
