@@ -2,10 +2,8 @@
   "name": "nexora-hackathon",
   "version": "1.0.0",
   "private": true,
-  "workspaces": [
-    "frontend"
-  ],
+  "type": "module",
   "scripts": {
-    "build": "npm run build --workspace=frontend"
+    "build": "node build.js"
   }
 }
