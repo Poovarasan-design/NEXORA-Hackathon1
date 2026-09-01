@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "team_name": "CyberKnights",
+    "team_leader_name": "Arun Kumar",
+    "college_name": "NSCET",
+    "department_year": "CSE 3rd Year",
+    "phone_number": "9876543210",
+    "whatsapp_number": "9876543210",
+    "email": "arun@nscet.org",
+    "team_size": 4,
+    "theme": "Smart Automation",
+    "created_at": "2026-08-26T12:14:15.664Z"
+  },
+  {
+    "id": 2,
+    "team_name": "QuantumDevs",
+    "team_leader_name": "Karthik S",
+    "college_name": "NSCET",
+    "department_year": "ECE 4th Year",
+    "phone_number": "9876543210",
+    "whatsapp_number": "9876543210",
+    "email": "karthik@nscet.org",
+    "team_size": 3,
+    "theme": "Robotics and Drones",
+    "team_members": [
+      {
+        "name": "Priya M",
+        "departmentYear": "ECE 4th Year",
+        "phone": "9876543211",
+        "whatsapp": "9876543211",
+        "email": "priya@nscet.org"
+      },
+      {
+        "name": "Vimal K",
+        "departmentYear": "EEE 3rd Year",
+        "phone": "9876543212",
+        "whatsapp": "9876543212",
+        "email": "vimal@nscet.org"
+      }
+    ],
+    "created_at": "2026-08-26T13:45:15.498Z"
+  },
+  {
+    "id": 3,
+    "team_name": "Samurai Six",
+    "team_leader_name": "Subiksaa",
+    "college_name": "Nadar saraswathi college of engineering and technology",
+    "department_year": "CSE - 4th",
+    "phone_number": "987654321",
+    "whatsapp_number": "987654321",
+    "email": "asdfads123@gmail.com",
+    "team_size": 2,
+    "theme": "Transportation & Logistics",
+    "team_members": [
+      {
+        "name": "L.Poovarasan",
+        "departmentYear": "CSE-3rd",
+        "phone": "987654321",
+        "whatsapp": "987654321",
+        "email": "subiakkathambi12@gmail.com"
+      }
+    ],
+    "created_at": "2026-08-26T14:57:52.650Z"
+  }
+]
